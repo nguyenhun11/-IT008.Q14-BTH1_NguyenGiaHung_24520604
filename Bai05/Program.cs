@@ -77,7 +77,7 @@ namespace Bai05
             get
             {
                 if (thang < 1 || thang > 12) return false;
-                if (ngay < 0) return false;
+                if (ngay < 1) return false;
                 int maxNgay;
                 switch (thang)
                 {
