@@ -1,65 +1,107 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bai05
 {
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Nhap ngay: ");
+            Day ngay = new Day();
+            ngay.Nhap();
+            Console.WriteLine("Thu trong tuan la " + ngay.DayInWeek);
+        }
+    }
+
     class Day
     {
-        int ngay, thang, nam;
+        private int ngay, thang, nam;
+
+        //Nhập ngày tháng năm
         public void Nhap()
         {
-            Console.WriteLine("Nhap ngay / thang / nam");
-            ngay = Convert.ToInt32(Console.ReadLine());
-            thang = Convert.ToInt32(Console.ReadLine());
-            nam = Convert.ToInt32(Console.ReadLine());
-
-            if (!KiemTra())
+            thang = 1;
+            nam = 4;
+            do
             {
-                Console.WriteLine("Ngay khong hop le");
-                Nhap();
+
+                do
+                {
+
+                    do
+                    {
+                        Console.Write("Ngay: ");
+                        ngay = Convert.ToInt32(Console.ReadLine());
+                        if (!NgayHopLe) Console.WriteLine("Ngay khong hop le!");
+                        else break;
+                    }
+                    while (true);
+
+                    Console.Write("Thang: ");
+                    thang = Convert.ToInt32(Console.ReadLine());
+                    if (!NgayHopLe)
+                    {
+                        thang = 1;
+                        Console.WriteLine("Thang khong hop le!");
+                    }
+                    else break;
+                }
+                while (true);
+
+                Console.Write("Nam: ");
+                nam = Convert.ToInt32(Console.ReadLine());
+                if (!NgayHopLe)
+                {
+                    thang = 1;
+                    nam = 4;
+                    Console.WriteLine("Nam khong hop le!");
+                }
+                else break;
+            }
+            while (true);
+        }
+
+        //Kiểm tra năm nhuận
+        private bool IsNamNhuan
+        {
+            get
+            {
+                return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
             }
         }
 
-        private bool IsNamNhuan()
+        //Kiểm tra ngày hợp lệ
+        private bool NgayHopLe
         {
-            return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
-        }
-
-        private bool KiemTra()
-        {
-            if (thang < 1 || thang > 12) return false;
-            if (ngay < 0) return false;
-
-            if (ngay > DaysInMonth()) return false;
-            return true;
-        }
-
-        private int DaysInMonth()
-        {
-            int maxNgay = 0;
-            switch (thang)
+            get
             {
-                case 1:
-                case 3:
-                case 5:
-                case 7:
-                case 8:
-                case 10:
-                case 12:
-                    maxNgay = 31; break;
-                case 2:
-                    if (IsNamNhuan()) maxNgay = 29;
-                    else maxNgay = 28;
-                    break;
-                default:
-                    maxNgay = 30; break;
+                if (thang < 1 || thang > 12) return false;
+                if (ngay < 0) return false;
+                int maxNgay;
+                switch (thang)
+                {
+                    case 1:
+                    case 3:
+                    case 5:
+                    case 7:
+                    case 8:
+                    case 10:
+                    case 12:
+                        maxNgay = 31; break;
+                    case 2:
+                        if (IsNamNhuan) maxNgay = 29;
+                        else maxNgay = 28;
+                        break;
+                    default:
+                        maxNgay = 30; break;
+                }
+                if (ngay > maxNgay) return false;
+                return true;
             }
-            return maxNgay;
         }
 
+        //Danh sách ngày trong tuần
         private Dictionary<int, string> dayInWeek = new Dictionary<int, string>()
         {
             {0, "Chu nhat" },
@@ -70,22 +112,16 @@ namespace Bai05
             {5, "Thu sau" },
             {6, "Thu bay" }
         };
-
-        public string DayInWeek()
+        
+        //Trả về ngày trong tuần
+        public string DayInWeek
         {
-            DateTime date = new DateTime(nam, thang, ngay);
-            int thu =  (int)date.DayOfWeek;
-            return dayInWeek[thu];
-        }
-    }
-
-    internal class Program
-    {
-        static void Main(string[] args)
-        {
-            Day ngay = new Day();
-            ngay.Nhap();
-            Console.WriteLine("Thu trong tuan: " + ngay.DayInWeek());
+            get
+            {
+                DateTime date = new DateTime(nam, thang, ngay);
+                int thu = (int)date.DayOfWeek;
+                return dayInWeek[thu];
+            }
         }
     }
 }

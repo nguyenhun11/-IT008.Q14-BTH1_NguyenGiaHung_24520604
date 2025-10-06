@@ -1,13 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Bai02
 {
     internal class Program
     {
+        static void Main(string[] args)
+        {
+            //1. Nhập số nguyên dương
+            Console.Write("Nhap so nguyen n > 0: ");
+            int n = Convert.ToInt32(Console.ReadLine());
+
+            //2. In ra tổng số nguyên tố nhỏ hơn n
+            Console.WriteLine("Tong so nguyen to nho hon n: " 
+                + TongSoNguyenToNhoHon(n));
+        }
+
+        //Kiểm tra số nguyên tố
         private static bool IsPrime(int x)
         {
             if (x <= 1) return false;
@@ -19,20 +27,15 @@ namespace Bai02
             return true;
         }
 
+        //Tính tổng số nguyên tố bé hơn n
         static int TongSoNguyenToNhoHon(int n)
         {
             int sum = 0;
-            for(int i = 2; i < n; i++)
+            for (int i = 2; i < n; i++)
             {
                 if (IsPrime(i)) sum += i;
             }
             return sum;
-        }
-
-        static void Main(string[] args)
-        {
-            int n = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine("Tong so nguyen to nho hon n: " + TongSoNguyenToNhoHon(n));
         }
     }
 }
