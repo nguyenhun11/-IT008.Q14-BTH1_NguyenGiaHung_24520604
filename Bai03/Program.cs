@@ -27,15 +27,29 @@ namespace Bai03
         {
             private int ngay, thang, nam;
 
+            //Hàm nhập số nguyên
+            private int NhapSoNguyen(string thongBao)
+            {
+                int value;
+                bool ok;
+                do
+                {
+                    Console.Write(thongBao);
+                    ok = int.TryParse(Console.ReadLine(), out value);
+                    if (!ok)
+                    {
+                        Console.WriteLine("Gia tri khong hop le, vui long nhap lai!");
+                    }
+                } while (!ok);
+                return value;
+            }
+
             //Nhập ngày tháng năm
             public void Nhap()
             {
-                Console.Write("Ngay: ");
-                ngay = Convert.ToInt32(Console.ReadLine());
-                Console.Write("Thang: ");
-                thang = Convert.ToInt32(Console.ReadLine());
-                Console.Write("Nam: ");
-                nam = Convert.ToInt32(Console.ReadLine());
+                ngay = NhapSoNguyen("Ngay: ");
+                thang = NhapSoNguyen("Thang: ");
+                nam = NhapSoNguyen("Nam: ");
             }
 
             //In ra ngày/tháng/năm
@@ -47,15 +61,6 @@ namespace Bai03
                 }
             }
 
-            //Kiểm tra năm nhuận
-            private bool IsNamNhuan
-            {
-                get
-                {
-                    return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
-                }
-            }
-
             //Kiểm tra ngày hợp lệ
             public bool NgayHopLe
             {
@@ -63,24 +68,17 @@ namespace Bai03
                 {
                     if (thang < 1 || thang > 12) return false;
                     if (ngay < 1) return false;
-                    int maxNgay;
-                    switch (thang)
+                    int namCheck;//Chuyển năm hợp lệ sử dụng Datetime
+                    if (nam < 1 || nam > 9999)
                     {
-                        case 1:
-                        case 3:
-                        case 5:
-                        case 7:
-                        case 8:
-                        case 10:
-                        case 12:
-                            maxNgay = 31; break;
-                        case 2:
-                            if (IsNamNhuan) maxNgay = 29;
-                            else maxNgay = 28;
-                            break;
-                        default:
-                            maxNgay = 30; break;
+                        namCheck = ((nam % 9999) + 9999) % 9999;
+                        if (namCheck == 0) namCheck = 9999;      
                     }
+                    else
+                    {
+                        namCheck = nam;
+                    }
+                    int maxNgay = DateTime.DaysInMonth(namCheck, thang);
                     if (ngay > maxNgay) return false;
                     return true;
                 }

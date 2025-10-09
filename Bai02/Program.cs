@@ -7,12 +7,29 @@ namespace Bai02
         static void Main(string[] args)
         {
             //1. Nhập số nguyên dương
-            Console.Write("Nhap so nguyen n > 0: ");
-            int n = Convert.ToInt32(Console.ReadLine());
+            int n = NhapSoNguyen("Nhap so nguyen n > 0: ");
 
             //2. In ra tổng số nguyên tố nhỏ hơn n
             Console.WriteLine("Tong so nguyen to nho hon n: " 
                 + TongSoNguyenToNhoHon(n));
+        }
+
+        //Hàm nhập số nguyên
+        static private int NhapSoNguyen(string thongBao)
+        {
+            int value;
+            bool ok;
+            do
+            {
+                Console.Write(thongBao);
+                ok = int.TryParse(Console.ReadLine(), out value)
+                    && value > 0;
+                if (!ok)
+                {
+                    Console.WriteLine("Gia tri khong hop le, vui long nhap lai!");
+                }
+            } while (!ok);
+            return value;
         }
 
         //Kiểm tra số nguyên tố

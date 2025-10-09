@@ -6,6 +6,29 @@ namespace Bai01
 {
     internal class Program
     {
+        static void Main(string[] args)
+        {
+            //1. Nhập n và tạo mảng
+            int n = NhapSoNguyen("1. Nhap n > 0: ");
+            MangSoNguyen mang = new MangSoNguyen(n);
+
+            //2. In ra mảng
+            Console.WriteLine("2. Da tao mang");
+            mang.Xuat();
+
+            //3. Tổng các số lẻ
+            Console.WriteLine("\n3. Tong so le: " + 
+                mang.Sum(x => (x % 2 == 1)));
+            
+            //4. Đếm số nguyên tố
+            Console.WriteLine("4. Dem so nguyen to: " +
+                mang.Count(x => IsPrime(x)));
+            
+            //5. Tìm số chính phương nhỏ nhất
+            Console.WriteLine("5. So chinh phuong nho nhat: " +
+                mang.FindMin(x => IsSoChinhPhuong(x)));
+        }
+
         public delegate bool DieuKien(int i);
 
         public class MangSoNguyen
@@ -26,6 +49,7 @@ namespace Bai01
                 CreateRandom(n);
             }
 
+            //Tạo mảng ngẫu nhiên
             private void CreateRandom(int n, int minVal = -100, int maxVal = 100)
             {
                 Random rnd = new Random();
@@ -115,29 +139,21 @@ namespace Bai01
             return root * root == x;
         }
 
-        static void Main(string[] args)
+        //Hàm nhập số nguyên
+        static private int NhapSoNguyen(string thongBao)
         {
-            //1. Nhập n và tạo mảng
-            Console.Write("1. Nhap n > 0: ");
-            int n = Convert.ToInt32(Console.ReadLine());
-            MangSoNguyen mang = new MangSoNguyen(n);
-
-            //2. In ra mảng
-            Console.WriteLine("2. Da tao mang");
-            mang.Xuat();
-
-            //3. Tổng các số lẻ
-            Console.WriteLine("\n3. Tong so le: " + 
-                mang.Sum(x => (x % 2 == 1)));
-            
-            //4. Đếm số nguyên tố
-            Console.WriteLine("4. Dem so nguyen to: " +
-                mang.Count(x => IsPrime(x)));
-            
-            //5. Tìm số chính phương nhỏ nhất
-            Console.WriteLine("5. So chinh phuong nho nhat: " +
-                mang.FindMin(x => IsSoChinhPhuong(x)));
-
+            int value;
+            bool ok;
+            do
+            {
+                Console.Write(thongBao);
+                ok = int.TryParse(Console.ReadLine(), out value);
+                if (!ok)
+                {
+                    Console.WriteLine("Gia tri khong hop le, vui long nhap lai!");
+                }
+            } while (!ok);
+            return value;
         }
     }
 }

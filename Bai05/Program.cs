@@ -12,115 +12,114 @@ namespace Bai05
             ngay.Nhap();
             Console.WriteLine("Thu trong tuan la " + ngay.DayInWeek);
         }
-    }
 
-    class Day
-    {
-        private int ngay, thang, nam;
-
-        //Nhập ngày tháng năm
-        public void Nhap()
+        class Day
         {
-            thang = 1;
-            nam = 4;
-            do
-            {
+            private int ngay, thang, nam;
 
+            //Nhập ngày tháng năm
+            public void Nhap()
+            {
+                thang = 1;
+                nam = 4;
                 do
                 {
 
                     do
                     {
-                        Console.Write("Ngay: ");
-                        ngay = Convert.ToInt32(Console.ReadLine());
-                        if (!NgayHopLe) Console.WriteLine("Ngay khong hop le!");
+
+                        do
+                        {
+                            ngay = NhapSoNguyen("Ngay: ");
+                            if (!NgayHopLe) Console.WriteLine("Ngay khong hop le!");
+                            else break;
+                        }
+                        while (true);
+
+                        thang = NhapSoNguyen("Thang: ");
+                        if (!NgayHopLe)
+                        {
+                            thang = 1;
+                            Console.WriteLine("Thang khong hop le!");
+                        }
                         else break;
                     }
                     while (true);
 
-                    Console.Write("Thang: ");
-                    thang = Convert.ToInt32(Console.ReadLine());
+                    nam = NhapSoNguyen("Nam: ");
                     if (!NgayHopLe)
                     {
                         thang = 1;
-                        Console.WriteLine("Thang khong hop le!");
+                        nam = 4;
+                        Console.WriteLine("Nam khong hop le!");
                     }
                     else break;
                 }
                 while (true);
+            }
 
-                Console.Write("Nam: ");
-                nam = Convert.ToInt32(Console.ReadLine());
-                if (!NgayHopLe)
+            //Kiểm tra ngày hợp lệ
+            public bool NgayHopLe
+            {
+                get
                 {
-                    thang = 1;
-                    nam = 4;
-                    Console.WriteLine("Nam khong hop le!");
+                    if (thang < 1 || thang > 12) return false;
+                    if (ngay < 1) return false;
+                    int namCheck;//Chuyển năm hợp lệ sử dụng Datetime
+                    if (nam < 1 || nam > 9999)
+                    {
+                        namCheck = ((nam % 9999) + 9999) % 9999;
+                        if (namCheck == 0) namCheck = 9999;
+                    }
+                    else
+                    {
+                        namCheck = nam;
+                    }
+                    int maxNgay = DateTime.DaysInMonth(namCheck, thang);
+                    if (ngay > maxNgay) return false;
+                    return true;
                 }
-                else break;
             }
-            while (true);
-        }
 
-        //Kiểm tra năm nhuận
-        private bool IsNamNhuan
-        {
-            get
+            //Danh sách ngày trong tuần
+            private Dictionary<int, string> dayInWeek = new Dictionary<int, string>()
             {
-                return (nam % 4 == 0 && nam % 100 != 0) || (nam % 400 == 0);
-            }
-        }
+                {0, "Chu nhat" },
+                {1, "Thu hai" },
+                {2, "Thu ba" },
+                {3, "Thu tu" },
+                {4, "Thu nam" },
+                {5, "Thu sau" },
+                {6, "Thu bay" }
+            };
 
-        //Kiểm tra ngày hợp lệ
-        private bool NgayHopLe
-        {
-            get
+            //Trả về ngày trong tuần
+            public string DayInWeek
             {
-                if (thang < 1 || thang > 12) return false;
-                if (ngay < 1) return false;
-                int maxNgay;
-                switch (thang)
+                get
                 {
-                    case 1:
-                    case 3:
-                    case 5:
-                    case 7:
-                    case 8:
-                    case 10:
-                    case 12:
-                        maxNgay = 31; break;
-                    case 2:
-                        if (IsNamNhuan) maxNgay = 29;
-                        else maxNgay = 28;
-                        break;
-                    default:
-                        maxNgay = 30; break;
+                    DateTime date = new DateTime(nam, thang, ngay);
+                    int thu = (int)date.DayOfWeek;
+                    return dayInWeek[thu];
                 }
-                if (ngay > maxNgay) return false;
-                return true;
             }
-        }
 
-        //Danh sách ngày trong tuần
-        private Dictionary<int, string> dayInWeek = new Dictionary<int, string>()
-        {
-            {0, "Chu nhat" },
-            {1, "Thu hai" },
-            {2, "Thu ba" },
-            {3, "Thu tu" },
-            {4, "Thu nam" },
-            {5, "Thu sau" },
-            {6, "Thu bay" }
-        };
-        
-        //Trả về ngày trong tuần
-        public string DayInWeek
-        {
-            get
+
+            //Hàm nhập số nguyên
+            static private int NhapSoNguyen(string thongBao)
             {
-                DateTime date = new DateTime(nam, thang, ngay);
-                int thu = (int)date.DayOfWeek;
-                return dayInWeek[thu];
+                int value;
+                bool ok;
+                do
+                {
+                    Console.Write(thongBao);
+                    ok = int.TryParse(Console.ReadLine(), out value);
+                    if (!ok)
+                    {
+                        Console.WriteLine("Gia tri khong hop le, vui long nhap lai!");
+                    }
+                } while (!ok);
+                return value;
             }
         }
     }
